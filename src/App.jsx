@@ -1,13 +1,25 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import Header from "./componet/Header";
-import Home from "./page/Home";
+import Home from "./page/home/Home";
+import { Route, Routes } from "react-router";
+
+
 
 function App() {
+
+const userdetails={
+  name:"Skill spark",
+  image:"public/icon"
+}
   return (
     <>
-    <Header/>
-    <Home/>
+<Routes>
+<Route path="/" element={ <Home/>}/>
+<Route path="/about" element={<div>This is about page</div>}/>
+</Routes>
+    
+ 
     </>
   );
 }
