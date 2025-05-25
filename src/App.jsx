@@ -16,7 +16,7 @@ const userdetails={
     <>
 <Routes>
 <Route path="/" element={ <Home/>}/>
-<Route path="/about" element={<div>This is about page</div>}/>
+{/* <Route path="/about" element={<div>This is about page</div>}/> */}
 </Routes>
     
  
