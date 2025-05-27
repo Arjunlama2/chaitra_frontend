@@ -44,50 +44,55 @@
 
 import React from "react";
 import image from "../../assets/hero.png";
+import Card from "../../componet/Card";
 
-const Card = (props) => {
-  const { data } = props;
-  return (
-    <div>
-  
-      {data ? (
-        <div className="w-[20vw]">
-          <div>
-            <img src={`${data.imageLink}`} alt="" />
-          </div>
-          <div className="w-[20vw]">
-            <p>title:{data.title}</p>
-            <p>Descrition:{data.discription}</p>
-          </div>
-        </div>
-        
-      ) : (
-        <div> no data</div>
-      )}
-    </div>
-  );
+const data = [
+  {
+    title: "card1",
+    discription:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
+    imageLink: image,
+  },
+  {
+title: "card2",
+    discription:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
+    imageLink: image,
+  },
+  {
+    title: "card2",
+    discription:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
+    imageLink: image,
+  },
+   {
+    title: "card2",
+    discription:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
+    imageLink: image,
+  },
+   {
+    title: "card3",
+    discription:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
+    imageLink: image,
+  }
+];
 
 
-};
+
 function Home() {
-  return (
-    <div className="flex gap-10">
-      <Card
-        data={{
-          title: "card1",
-          discription:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
-          imageLink: image,
-        }}
-      />
 
-      <Card
-       data={{
-          title: "card2",
-          discription:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
-          imageLink: image,
-        }} />
+
+  return (
+    <div className="grid grid-cols-4 gap-10 ">
+
+{ data &&
+  data.map((el,index)=>{
+    return <Card data={el} key={index}/>
+  })
+}
+      
     </div>
   );
 }
