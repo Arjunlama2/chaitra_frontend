@@ -1,137 +1,3 @@
-// // hooks
-
-// import { useEffect, useState } from "react";
-
-// function Home() {
-//  const [data, setData] = useState(0);
-//  const [name, setName] = useState("");
-
-//  useEffect(()=>{
-
-//  },[])
-
-// //  it is mustly used as variable
-// // if we dont handle states properly
-// // Infinity loop
-
-// const increase=()=>{
-// setData(data+1)
-// }
-
-// const setUserName=(e)=>{
-//   console.log(e.target.value)
-
-//   setName(e.target.value)
-
-// }
-
-//   return (
-//     <div className="text-center mt-5">
-//     {
-//       data
-//     }
-//     <button className="bg-blue-600  cursor-pointer" onClick={()=>increase()}>
-//       increase
-//     </button>
-
-//     <input onChange={(e)=>setUserName(e) } placeholder="write your Name"/>
-//     my name is :{name}
-//     </div>
-//   );
-// }
-
-// export default Home;
-
-// import React, { useEffect, useState } from "react";
-// import image from "../../assets/hero.png";
-// import Card from "../../componet/Card";
-
-// const data = [
-//   {
-//     title: "card1",
-//     discription:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
-//     imageLink: image,
-//   },
-//   {
-// title: "card2",
-//     discription:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
-//     imageLink: image,
-//   },
-//   {
-//     title: "card2",
-//     discription:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
-//     imageLink: image,
-//   },
-//    {
-//     title: "card2",
-//     discription:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
-//     imageLink: image,
-//   },
-//    {
-//     title: "card3",
-//     discription:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt delectus dolores sit, libero praesentium tempora consectetur ab optio iusto at quia porro hic totam repellat? Excepturi rerum fuga nesciunt aut.",
-//     imageLink: image,
-//   }
-// ];
-
-// const Test=()=>{
-//   const[state,setState]=useState(true)
-
-//   const changeState=async()=>{
-//     setState(!state)
-//   }
-//   useEffect(()=>{
-// console.log("test initialie")
-// return function(){
-//   console.log("clearn up ")
-// }
-//   },[])
-
-//   useEffect(()=>{
-
-// console.log("test initialie updated")
-//   },[state])
-// return(
-//   <div>
-//     Test component
-//     <button className="bg-red-600" onClick={changeState}>Update</button>
-//   </div>
-// )
-
-// }
-
-// function Home() {
-// const [showtes, setShowtest]=useState(true)
-
-//   return (
-//     <div className="grid grid-cols-4 gap-10 ">
-
-// {/* { data &&
-//   data.map((el,index)=>{
-//     return <Card data={el} key={index}/>
-//   }) */}
-// {
-//   showtes &&
-//     <Test/>
-// }
-
-// <button className="bg-blue-800 text-white" onClick={()=>setShowtest(!showtes)}>
-// {
-//   showtes?"Hide Test":"Show Test"
-// }
-//    </button>
-
-//     </div>
-//   );
-// }
-
-// export default Home;
-
 import React, { useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
@@ -139,23 +5,26 @@ import { CgAddR } from "react-icons/cg";
 
 function Home() {
   const [task, setTask] = useState("");
-  const [data, setData] = useState();
-  const [loading, setLaoding] = useState(true);
-  const [editPop,setEditPop]=useState(false)
-  const [editData,setEditdata]=useState(null)
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editPop, setEditPop] = useState(false);
+  const [editData, setEditData] = useState("");
+  const [completed, setCompleted] = useState(false);
+  const [id, setId] = useState(null);
+
   useEffect(() => {
     fetch("https://dummyjson.com/todos?limit=5")
       .then((res) => res.json())
       .then((res) => {
         setData(res.todos);
-        setLaoding(false);
+        setLoading(false);
       });
   }, []);
 
   const handleSubmit = async () => {
     if (task.trim()) {
       try {
-        const response = await fetch("https://dummyjson.com/todos/add", {
+        await fetch("https://dummyjson.com/todos/add", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -164,95 +33,133 @@ function Home() {
             userId: 5,
           }),
         });
-
-        setTask("")
+        setTask("");
       } catch (err) {
-        console.log("erreor", err);
+        console.error("Error adding task:", err);
       }
     }
   };
 
-const handleEdit=(payload)=>{
-
-  const {id}=payload
-fetch(`https://dummyjson.com/todos/${id}`, {
-  method: 'PUT', /* or PATCH */
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    completed:true
-  })
-})
-.then(res => res.json())
-.then(console.log);
-}
-
-
-
-
-
+  const handleEdit = async () => {
+    try {
+      const response = await fetch(`https://dummyjson.com/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          todo: editData,
+          completed: completed,
+        }),
+      });
+      const updated = await response.json();
+      console.log("Updated:", updated);
+      setEditPop(false);
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
 
   if (loading) {
     return (
-      <div>
-        <div className="animate-spin">Loading</div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin text-lg">Loading...</div>
       </div>
     );
   }
+
   return (
-    <div className="bg-[#c9bead] flex justify-center items-center">
-      <div>
-        <p>Create Daily task</p>
-        <div className="flex">
+    <div className="bg-[#f0ece3] min-h-screen py-10 px-4 flex justify-center">
+      <div className="w-full max-w-xl bg-white rounded-xl shadow-lg p-6 space-y-6">
+        <h2 className="text-2xl font-bold text-center text-gray-800">Daily Task Manager</h2>
+
+        <div className="flex gap-3">
           <input
-            type="search"
-            name="task"
+            type="text"
             value={task}
-            id=""
-            placeholder="write your task"
+            placeholder="Write your task"
             onChange={(e) => setTask(e.target.value)}
+            className="flex-1 px-4 py-2 border rounded-lg outline-none"
           />
-          <button className="cursor-pointer flex items-center gap-2 py-1 px-2 bg-green-500" onClick={handleSubmit}>
-            <CgAddR/>
-            Add Task{" "}
+          <button
+            onClick={handleSubmit}
+            className="flex   items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+          >
+            <CgAddR />
+            Add
           </button>
         </div>
 
-        {data && !loading && data.length > 0 ? (
-          data.map((el, index) => {
-            return (
-              <div className="flex gap-10 m-5">
-                <li
-                  className={`${el.completed ? "line-through" : ""} list-none`}
-                  key={index}
-                >
+        <div className="space-y-4">
+          {data.length > 0 ? (
+            data.map((el, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-lg"
+              >
+                <li className={`list-none ${el.completed ? "line-through text-gray-500" : ""}`}>
                   {el.todo}
                 </li>
-                <div className="flex gap-2 ">
-                  <button className="flex bg-blue-400 items-center px-2 py-1 rounded-lg gap-2"
-                  onClick={()=>setEditPop(true)}
+                <div className="flex gap-2">
+                  <button
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    onClick={() => {
+                      setEditPop(true);
+                      setEditData(el.todo);
+                      setCompleted(el.completed);
+                      setId(el.id);
+                    }}
                   >
                     <FaRegEdit />
                     Edit
                   </button>
-                  <button className="flex bg-red-500 items-center px-2 py-1 rounded-lg">
+                  <button className="flex items-center gap-1 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
                     <MdDeleteOutline />
                     Delete
                   </button>
                 </div>
               </div>
-            );
-          })
-        ) : (
-          <div>No task added yet</div>
-        )}
+            ))
+          ) : (
+            <div className="text-center text-gray-600">No tasks added yet.</div>
+          )}
+        </div>
       </div>
-  {
-    editPop && <div className="fixed top-[60px] h-72 bg-blue-400/80 w-screen flex justify-center items-center ">
-      <div>
-<input type="text"  />
-      </div>
-      </div>
-  }
+
+      {/* Edit Popup */}
+      {editPop && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg space-y-4 w-[90%] max-w-md">
+            <h3 className="text-xl font-semibold text-center">Edit Task</h3>
+            <input
+              type="text"
+              value={editData}
+              onChange={(e) => setEditData(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg outline-none"
+            />
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={completed}
+                onChange={(e) => setCompleted(e.target.checked)}
+              />
+              <span>Mark as completed</span>
+            </label>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={handleEdit}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => setEditPop(false)}
+                className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
