@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { CgAddR } from "react-icons/cg";
+import { ThemeContext } from "../../main";
 
 function Home() {
+
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+console.log("this is current theme",theme)
+
   const [task, setTask] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,9 +73,11 @@ function Home() {
   }
 
   return (
-    <div className="bg-[#f0ece3] min-h-screen py-10 px-4 flex justify-center">
+    <div className={`${theme=="light"?"bg-[#f0ece3]":"bg-black"} min-h-screen py-10 px-4 flex justify-center`}>
       <div className="w-full max-w-xl bg-white rounded-xl shadow-lg p-6 space-y-6">
         <h2 className="text-2xl font-bold text-center text-gray-800">Daily Task Manager</h2>
+
+        <button className="bg-red-500" onClick={toggleTheme}> change theme</button>
 
         <div className="flex gap-3">
           <input

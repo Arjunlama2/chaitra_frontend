@@ -7,12 +7,9 @@ import Login from "./page/login";
 
 
 
+
 function App() {
 
-const userdetails={
-  name:"Skill spark",
-  image:"public/icon"
-}
   return (
     <>
 <Routes>
