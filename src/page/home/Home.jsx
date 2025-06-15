@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { CgAddR } from "react-icons/cg";
 import { ThemeContext } from "../../main";
+import useFetch from "../../hook/useFetch";
 
 function Home() {
 
@@ -11,22 +12,31 @@ function Home() {
 console.log("this is current theme",theme)
 
   const [task, setTask] = useState("");
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
+  // const [loading, setLoading] = useState(true);
   const [editPop, setEditPop] = useState(false);
   const [editData, setEditData] = useState("");
   const [completed, setCompleted] = useState(false);
   const [id, setId] = useState(null);
 
-  useEffect(() => {
-    fetch("https://dummyjson.com/todos?limit=5")
-      .then((res) => res.json())
-      .then((res) => {
-        setData(res.todos);
-        setLoading(false);
-      });
-  }, []);
+  const inputRef=useRef()
+//   useEffect(() => {
+//     fetch("https://dummyjson.com/todos?limit=5")
+//       .then((res) => res.json())
+//       .then((res) => {
+//         setData(res.todos);
+//         setLoading(false);
+//       });
+//   }, []);
 
+
+// console.log("this is inoput ref",inputRef)
+
+
+const {data,loading,error}=useFetch("todos/1")
+
+
+console.log(data)
   const handleSubmit = async () => {
     if (task.trim()) {
       try {
@@ -81,6 +91,7 @@ console.log("this is current theme",theme)
 
         <div className="flex gap-3">
           <input
+          ref={inputRef}
             type="text"
             value={task}
             placeholder="Write your task"
@@ -97,7 +108,7 @@ console.log("this is current theme",theme)
         </div>
 
         <div className="space-y-4">
-          {data.length > 0 ? (
+          {data?.length > 0 ? (
             data.map((el, index) => (
               <div
                 key={index}
